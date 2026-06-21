@@ -131,10 +131,6 @@ function ReservationPage() {
       <div className="hero-card">
         <div className="hero-top">
           <div className="hero-tag">EYVAZ BƏRBƏR STUDİYASI</div>
-          <div className="hero-segment">
-            <span className="hero-segment-item active">Müştəri</span>
-            <span className="hero-segment-item">Admin · /admin</span>
-          </div>
         </div>
 
         <div className="hero-main">
