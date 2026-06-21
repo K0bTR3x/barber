@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node --check server.js)",
+      "Bash(node --check routes/example.js)",
+      "Bash(node --check utils/cleanup.js)",
+      "Bash(node --check routes/closedDays.js)",
+      "Bash(node --check models/ClosedDay.js)",
+      "Bash(node --check routes/closedSlots.js)",
+      "Bash(node --check models/ClosedSlot.js)"
+    ]
+  }
+}

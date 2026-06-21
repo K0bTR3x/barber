@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Marcellus&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  body { margin: 0; }
+  ::-webkit-scrollbar { width: 0; height: 0; }
+  @keyframes sheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes popIn { from { transform: scale(.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  @keyframes toastIn { from { transform: translate(-50%, 20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
+  @keyframes ringPulse { 0% { box-shadow: 0 0 0 0 rgba(70,209,138,.5); } 70% { box-shadow: 0 0 0 10px rgba(70,209,138,0); } 100% { box-shadow: 0 0 0 0 rgba(70,209,138,0); } }
+  .scrollarea { -webkit-overflow-scrolling: touch; }
+</style>
+</helmet>
+<div style="min-height:100vh;width:100%;background:radial-gradient(120% 80% at 50% -10%, #1a160d 0%, #0b0a08 45%, #060605 100%);display:flex;flex-direction:column;align-items:center;gap:22px;padding:34px 16px 60px;font-family:Manrope, sans-serif;">
+
+  <div style="display:flex;flex-direction:column;align-items:center;gap:14px;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:7px;height:7px;border-radius:50%;background:{{ gold }};box-shadow:0 0 10px {{ gold }};"></div>
+      <div style="font-family:Marcellus, serif;letter-spacing:.42em;color:#e8e6df;font-size:15px;padding-left:.42em;">{{ businessName }}</div>
+    </div>
+    <div style="display:flex;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:999px;padding:4px;gap:4px;">
+      <div onClick="{{ goCustomer }}" style="{{ segCustStyle }}">Müştəri</div>
+      <div onClick="{{ goAdmin }}" style="{{ segAdminStyle }}">Admin · /admin-eyvaz</div>
+    </div>
+  </div>
+
+  <div style="position:relative;width:393px;height:824px;border-radius:54px;padding:13px;background:linear-gradient(160deg,#26241f,#0c0b09);box-shadow:0 40px 90px -30px rgba(0,0,0,0.9), inset 0 1px 1px rgba(255,255,255,0.14), 0 0 0 1px rgba(0,0,0,0.5);flex:0 0 auto;">
+    <div style="position:relative;width:100%;height:100%;border-radius:42px;overflow:hidden;background:#0a0a0c;">
+
+      <div style="position:absolute;top:0;left:0;right:0;height:54px;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:0 30px;pointer-events:none;">
+        <span style="color:#f4f3ef;font-size:15px;font-weight:700;letter-spacing:.02em;">9:41</span>
+        <span style="display:flex;gap:6px;align-items:center;color:#f4f3ef;font-size:13px;">⌁ ▮</span>
+      </div>
+      <div style="position:absolute;top:13px;left:50%;transform:translateX(-50%);width:118px;height:34px;background:#000;border-radius:20px;z-index:31;"></div>
+
+      <div class="scrollarea" style="position:absolute;inset:0;overflow-y:auto;padding:62px 0 116px;">
+
+        <sc-if value="{{ showRes }}" hint-placeholder-val="{{ true }}">
+          <div style="padding:0 20px;">
+            <div style="display:flex;flex-direction:column;align-items:center;text-align:center;margin-bottom:26px;">
+              <div style="font-size:11px;letter-spacing:.4em;color:{{ gold }};padding-left:.4em;margin-bottom:8px;">{{ tagline }}</div>
+              <div style="font-family:Marcellus, serif;font-size:52px;line-height:.92;color:#f6f4ee;">{{ businessName }}</div>
+              <div style="width:46px;height:2px;background:{{ gold }};margin-top:14px;border-radius:2px;"></div>
+            </div>
+
+            <div style="background:linear-gradient(150deg, rgba(201,162,39,0.14), rgba(255,255,255,0.03));border:1px solid rgba(201,162,39,0.22);border-radius:22px;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+              <div>
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+                  <span style="width:9px;height:9px;border-radius:50%;background:#46d18a;animation:ringPulse 2s infinite;"></span>
+                  <span style="color:#f4f3ef;font-weight:700;font-size:15px;">{{ openLabel }}</span>
+                </div>
+                <div style="color:#9a978d;font-size:13px;">İş saatları · 10:00 – 19:00</div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-family:Marcellus,serif;font-size:26px;color:{{ gold }};line-height:1;">{{ freeCount }}</div>
+                <div style="color:#9a978d;font-size:11px;margin-top:2px;">boş saat</div>
+              </div>
+            </div>
+
+            <div onClick="{{ openBookingBtn }}" style="{{ heroBtnStyle }}">
+              <span style="font-size:17px;font-weight:700;">Rezerv et</span>
+              <span style="font-size:18px;">→</span>
+            </div>
+
+            <div style="display:flex;align-items:center;justify-content:space-between;margin:26px 4px 12px;">
+              <span style="color:#f4f3ef;font-size:15px;font-weight:700;">Bu gün boş saatlar</span>
+              <span style="color:#67645c;font-size:12px;">{{ todayDateLabel }}</span>
+            </div>
+            <div class="scrollarea" style="display:flex;gap:9px;overflow-x:auto;padding-bottom:4px;margin:0 -20px;padding-left:20px;padding-right:20px;">
+              <sc-for list="{{ todayChips }}" as="chip" hint-placeholder-count="5">
+                <div onClick="{{ chip.onTap }}" style="flex:0 0 auto;height:46px;padding:0 18px;border-radius:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.10);color:#f4f3ef;display:flex;align-items:center;font-weight:600;font-size:15px;cursor:pointer;">{{ chip.time }}</div>
+              </sc-for>
+              <sc-if value="{{ noTodaySlots }}" hint-placeholder-val="{{ false }}">
+                <div style="height:46px;display:flex;align-items:center;color:#67645c;font-size:13px;">Bu gün üçün boş saat yoxdur</div>
+              </sc-if>
+            </div>
+
+            <div style="color:#f4f3ef;font-size:15px;font-weight:700;margin:26px 4px 12px;">Xidmətlər</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <sc-for list="{{ services }}" as="sv" hint-placeholder-count="3">
+                <div onClick="{{ sv.onBook }}" style="display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.07);border-radius:16px;padding:15px 18px;cursor:pointer;">
+                  <div>
+                    <div style="color:#f4f3ef;font-weight:600;font-size:15px;">{{ sv.name }}</div>
+                    <div style="color:#9a978d;font-size:12px;margin-top:3px;">{{ sv.dur }}</div>
+                  </div>
+                  <div style="font-family:Marcellus,serif;color:{{ gold }};font-size:19px;">{{ sv.price }}</div>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="margin-top:24px;display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:14px 18px;">
+              <span style="font-size:18px;">📍</span>
+              <div>
+                <div style="color:#f4f3ef;font-size:14px;font-weight:600;">Nizami küç. 12, Bakı</div>
+                <div style="color:#9a978d;font-size:12px;margin-top:2px;">+994 50 555 12 12</div>
+              </div>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ showShop }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:0 20px;">
+            <div style="margin-bottom:18px;">
+              <div style="font-family:Marcellus,serif;font-size:34px;color:#f6f4ee;line-height:1;">Mağaza</div>
+              <div style="color:#9a978d;font-size:13px;margin-top:6px;">Ətirlər, güllər və baxım məhsulları</div>
+            </div>
+            <div class="scrollarea" style="display:flex;gap:8px;overflow-x:auto;margin:0 -20px 18px;padding:0 20px;">
+              <sc-for list="{{ cats }}" as="c" hint-placeholder-count="4">
+                <div onClick="{{ c.onTap }}" style="{{ c.style }}">{{ c.label }}</div>
+              </sc-for>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <sc-for list="{{ products }}" as="p" hint-placeholder-count="6">
+                <div style="position:relative;border-radius:18px;overflow:hidden;border:1px solid rgba(255,255,255,0.07);height:206px;display:flex;flex-direction:column;justify-content:space-between;padding:12px;background:{{ p.tileBg }};">
+                  <div style="align-self:flex-start;background:rgba(0,0,0,0.4);backdrop-filter:blur(6px);border:1px solid rgba(255,255,255,0.1);color:#e8e6df;font-size:10px;font-weight:600;letter-spacing:.08em;padding:4px 9px;border-radius:999px;">{{ p.catLabel }}</div>
+                  <div style="font-size:44px;text-align:center;flex:1;display:flex;align-items:center;justify-content:center;opacity:.92;">{{ p.glyph }}</div>
+                  <div>
+                    <div style="color:#f4f3ef;font-size:13px;font-weight:700;line-height:1.2;">{{ p.title }}</div>
+                    <div style="color:#9a978d;font-size:11px;margin:3px 0 8px;line-height:1.3;">{{ p.desc }}</div>
+                    <div style="display:flex;align-items:center;justify-content:space-between;">
+                      <span style="font-family:Marcellus,serif;color:{{ gold }};font-size:17px;">{{ p.price }}</span>
+                      <span style="width:30px;height:30px;border-radius:50%;background:{{ gold }};color:#1a1407;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;">+</span>
+                    </div>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:0 20px;">
+            <div style="margin-bottom:16px;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="font-family:Marcellus,serif;font-size:30px;color:#f6f4ee;">Admin Panel</span>
+              </div>
+              <div style="color:#67645c;font-size:12px;margin-top:4px;font-family:monospace;">/admin-eyvaz</div>
+            </div>
+
+            <div class="scrollarea" style="display:flex;gap:8px;overflow-x:auto;margin:0 -20px 18px;padding:0 20px;">
+              <sc-for list="{{ adminTabs }}" as="t" hint-placeholder-count="4">
+                <div onClick="{{ t.onTap }}" style="{{ t.style }}">
+                  {{ t.label }}<sc-if value="{{ t.showBadge }}" hint-placeholder-val="{{ false }}"><span style="margin-left:7px;background:#e6694e;color:#fff;font-size:11px;font-weight:700;padding:1px 7px;border-radius:999px;">{{ t.badge }}</span></sc-if>
+                </div>
+              </sc-for>
+            </div>
+
+            <sc-if value="{{ aRes }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;flex-direction:column;gap:12px;">
+                <sc-for list="{{ bookings }}" as="b" hint-placeholder-count="3">
+                  <div style="background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:16px;">
+                    <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;">
+                      <div>
+                        <div style="color:#f4f3ef;font-weight:700;font-size:16px;">{{ b.name }}</div>
+                        <div style="color:#9a978d;font-size:12px;margin-top:3px;">{{ b.phone }}</div>
+                      </div>
+                      <div style="{{ b.badgeStyle }}">{{ b.statusLabel }}</div>
+                    </div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+                      <span style="background:rgba(255,255,255,0.05);border-radius:8px;padding:5px 10px;color:#cfccc2;font-size:12px;">✂ {{ b.serviceName }}</span>
+                      <span style="background:rgba(255,255,255,0.05);border-radius:8px;padding:5px 10px;color:#cfccc2;font-size:12px;">🗓 {{ b.dateStr }}</span>
+                      <span style="background:rgba(201,162,39,0.15);border-radius:8px;padding:5px 10px;color:{{ gold }};font-size:12px;font-weight:700;">{{ b.time }}</span>
+                    </div>
+                    <sc-if value="{{ b.isPending }}" hint-placeholder-val="{{ true }}">
+                      <div style="display:flex;gap:9px;">
+                        <div onClick="{{ b.onAccept }}" style="flex:1;height:44px;border-radius:13px;background:linear-gradient(180deg,#52e09a,#37b277);color:#06301d;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;">Qəbul et</div>
+                        <div onClick="{{ b.onReject }}" style="flex:1;height:44px;border-radius:13px;background:rgba(230,105,78,0.12);border:1px solid rgba(230,105,78,0.4);color:#e6694e;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;">İmtina et</div>
+                      </div>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ aSlots }}" hint-placeholder-val="{{ false }}">
+              <div>
+                <div style="color:#9a978d;font-size:13px;margin-bottom:10px;">Gün seçin və saatları aktiv/deaktiv edin</div>
+                <div class="scrollarea" style="display:flex;gap:9px;overflow-x:auto;margin:0 -20px 18px;padding:0 20px;">
+                  <sc-for list="{{ adminDates }}" as="d" hint-placeholder-count="7">
+                    <div onClick="{{ d.onTap }}" style="{{ d.pillStyle }}">
+                      <span style="font-size:11px;opacity:.6;font-weight:600;">{{ d.wd }}</span>
+                      <span style="font-size:18px;font-weight:700;font-family:Marcellus,serif;">{{ d.dnum }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px;">
+                  <sc-for list="{{ adminSlots }}" as="s" hint-placeholder-count="9">
+                    <div onClick="{{ s.onToggle }}" style="{{ s.style }}">
+                      <span>{{ s.time }}</span>
+                      <span style="font-size:10px;opacity:.7;margin-top:2px;">{{ s.label }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ aDays }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:10px;">
+                <div style="color:#9a978d;font-size:13px;margin-bottom:2px;">İşlədiyiniz günləri seçin</div>
+                <sc-for list="{{ workDays }}" as="w" hint-placeholder-count="7">
+                  <div onClick="{{ w.onTap }}" style="display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:14px 18px;cursor:pointer;">
+                    <span style="color:#f4f3ef;font-size:15px;font-weight:600;">{{ w.label }}</span>
+                    <div style="{{ w.switchTrack }}"><div style="{{ w.switchKnob }}"></div></div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ aProducts }}" hint-placeholder-val="{{ false }}">
+              <div>
+                <div onClick="{{ addDemoProduct }}" style="display:flex;align-items:center;justify-content:center;gap:8px;height:48px;border-radius:14px;border:1px dashed rgba(201,162,39,0.5);color:{{ gold }};font-weight:700;font-size:14px;cursor:pointer;margin-bottom:14px;">＋ Yeni məhsul əlavə et</div>
+                <div style="display:flex;flex-direction:column;gap:10px;">
+                  <sc-for list="{{ products }}" as="p" hint-placeholder-count="4">
+                    <div style="display:flex;align-items:center;gap:13px;background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.07);border-radius:14px;padding:12px;">
+                      <div style="width:52px;height:52px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:26px;background:{{ p.tileBg }};flex:0 0 auto;">{{ p.glyph }}</div>
+                      <div style="flex:1;min-width:0;">
+                        <div style="color:#f4f3ef;font-size:14px;font-weight:700;">{{ p.title }}</div>
+                        <div style="color:#9a978d;font-size:12px;margin-top:2px;">{{ p.catLabel }}</div>
+                      </div>
+                      <div style="font-family:Marcellus,serif;color:{{ gold }};font-size:16px;">{{ p.price }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+
+      </div>
+
+      <sc-if value="{{ isCustomer }}" hint-placeholder-val="{{ true }}">
+        <div style="position:absolute;bottom:18px;left:50%;transform:translateX(-50%);display:flex;gap:6px;background:rgba(18,18,20,0.62);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.09);border-radius:24px;padding:8px;box-shadow:0 18px 40px -12px rgba(0,0,0,0.7);z-index:20;">
+          <div onClick="{{ tapRes }}" style="{{ navResStyle }}">
+            <span style="font-size:19px;">🗓</span>
+            <span style="font-size:11px;font-weight:600;">Rezervasiya</span>
+          </div>
+          <div onClick="{{ tapShop }}" style="{{ navShopStyle }}">
+            <span style="font-size:19px;">🛍</span>
+            <span style="font-size:11px;font-weight:600;">Mağaza</span>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ bookingOpen }}" hint-placeholder-val="{{ true }}">
+        <div onClick="{{ closeBooking }}" style="{{ overlayStyle }}"></div>
+        <div style="{{ sheetStyle }}">
+          <div style="padding:12px 0 6px;display:flex;flex-direction:column;align-items:center;flex:0 0 auto;position:relative;">
+            <div onClick="{{ closeBooking }}" style="width:42px;height:5px;border-radius:3px;background:rgba(255,255,255,0.22);cursor:grab;"></div>
+            <div onClick="{{ closeBooking }}" style="position:absolute;right:18px;top:14px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.07);color:#cfccc2;display:flex;align-items:center;justify-content:center;font-size:17px;cursor:pointer;">✕</div>
+          </div>
+          <div class="scrollarea" style="flex:1;overflow-y:auto;padding:8px 22px 0;">
+            <div style="font-family:Marcellus,serif;font-size:26px;color:#f6f4ee;">Rezervasiya</div>
+            <div style="color:#9a978d;font-size:13px;margin:5px 0 22px;">Boş saatı seçin, qalanını Eyvaz təsdiqləyəcək</div>
+
+            <div style="color:#cfccc2;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:9px;">Ad</div>
+            <input value="{{ fName }}" onInput="{{ onName }}" placeholder="Adınız" style="width:100%;height:50px;border-radius:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#f4f3ef;font-size:15px;padding:0 16px;outline:none;font-family:Manrope,sans-serif;margin-bottom:16px;" />
+
+            <div style="color:#cfccc2;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:9px;">Telefon nömrəsi</div>
+            <input value="{{ fPhone }}" onInput="{{ onPhone }}" placeholder="+994 __ ___ __ __" inputmode="tel" style="width:100%;height:50px;border-radius:14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#f4f3ef;font-size:15px;padding:0 16px;outline:none;font-family:Manrope,sans-serif;margin-bottom:16px;" />
+
+            <div style="color:#cfccc2;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:9px;">Xidmət növü</div>
+            <div style="display:flex;flex-direction:column;gap:9px;margin-bottom:18px;">
+              <sc-for list="{{ services }}" as="sv" hint-placeholder-count="3">
+                <div onClick="{{ sv.onSelect }}" style="{{ sv.chipStyle }}">
+                  <div style="display:flex;align-items:center;gap:11px;">
+                    <span style="{{ sv.dot }}"></span>
+                    <span style="font-weight:600;font-size:15px;">{{ sv.name }}</span>
+                  </div>
+                  <span style="font-family:Marcellus,serif;font-size:17px;">{{ sv.price }}</span>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="color:#cfccc2;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:9px;">Tarix seçimi</div>
+            <div class="scrollarea" style="display:flex;gap:9px;overflow-x:auto;margin:0 -22px 18px;padding:0 22px 4px;">
+              <sc-for list="{{ dates }}" as="d" hint-placeholder-count="8">
+                <div onClick="{{ d.onTap }}" style="{{ d.pillStyle }}">
+                  <span style="font-size:11px;opacity:.62;font-weight:600;">{{ d.wd }}</span>
+                  <span style="font-size:19px;font-weight:700;font-family:Marcellus,serif;">{{ d.dnum }}</span>
+                  <span style="font-size:9px;opacity:.5;">{{ d.mon }}</span>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;">
+              <span style="color:#cfccc2;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;">Boş saatlar</span>
+              <span style="color:#67645c;font-size:11px;">1 saat = 1 slot</span>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:9px;margin-bottom:14px;">
+              <sc-for list="{{ slots }}" as="s" hint-placeholder-count="10">
+                <div onClick="{{ s.onTap }}" style="{{ s.style }}">{{ s.time }}</div>
+              </sc-for>
+            </div>
+            <div style="display:flex;gap:14px;margin-bottom:16px;">
+              <span style="display:flex;align-items:center;gap:6px;color:#9a978d;font-size:11px;"><span style="width:11px;height:11px;border-radius:4px;background:rgba(255,255,255,0.1);"></span>Boş</span>
+              <span style="display:flex;align-items:center;gap:6px;color:#9a978d;font-size:11px;"><span style="width:11px;height:11px;border-radius:4px;background:rgba(255,255,255,0.04);"></span>Dolu</span>
+              <span style="display:flex;align-items:center;gap:6px;color:#9a978d;font-size:11px;"><span style="width:11px;height:11px;border-radius:4px;background:{{ gold }};"></span>Seçilmiş</span>
+            </div>
+          </div>
+          <div style="flex:0 0 auto;padding:14px 22px 26px;background:linear-gradient(0deg,#101012 70%,transparent);border-top:1px solid rgba(255,255,255,0.06);">
+            <div onClick="{{ submitBooking }}" style="{{ submitStyle }}">{{ submitLabel }}</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ confirmOpen }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:0;background:rgba(6,6,5,0.92);backdrop-filter:blur(8px);z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:34px;animation:fadeIn .3s ease;">
+          <div style="width:88px;height:88px;border-radius:50%;background:linear-gradient(180deg,#52e09a,#37b277);display:flex;align-items:center;justify-content:center;font-size:44px;color:#06301d;margin-bottom:24px;animation:popIn .4s cubic-bezier(.22,1.4,.36,1);box-shadow:0 16px 40px -10px rgba(70,209,138,0.5);">✓</div>
+          <div style="font-family:Marcellus,serif;font-size:30px;color:#f6f4ee;text-align:center;">Rezervasiya alındı!</div>
+          <div style="color:#9a978d;font-size:14px;text-align:center;margin:10px 0 26px;line-height:1.5;">Eyvaz təsdiqlədikdən sonra<br/>sizə zəng edəcək.</div>
+          <div style="width:100%;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.09);border-radius:20px;padding:20px;margin-bottom:26px;">
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);"><span style="color:#9a978d;font-size:13px;">Xidmət</span><span style="color:#f4f3ef;font-size:14px;font-weight:600;">{{ cService }}</span></div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);"><span style="color:#9a978d;font-size:13px;">Tarix</span><span style="color:#f4f3ef;font-size:14px;font-weight:600;">{{ cDate }}</span></div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);"><span style="color:#9a978d;font-size:13px;">Saat</span><span style="color:{{ gold }};font-size:15px;font-weight:700;">{{ cTime }}</span></div>
+            <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="color:#9a978d;font-size:13px;">Ad</span><span style="color:#f4f3ef;font-size:14px;font-weight:600;">{{ cName }}</span></div>
+          </div>
+          <div onClick="{{ closeConfirm }}" style="width:100%;height:54px;border-radius:16px;background:linear-gradient(180deg, color-mix(in srgb, var(--g,#c9a227), white 26%), var(--g,#c9a227));color:#1a1407;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;">Bağla</div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ detailOpen }}" hint-placeholder-val="{{ false }}">
+        <div onClick="{{ closeDetail }}" style="{{ detailOverlayStyle }}"></div>
+        <div style="{{ detailSheetStyle }}">
+          <div style="padding:12px 0 6px;display:flex;flex-direction:column;align-items:center;position:relative;">
+            <div onClick="{{ closeDetail }}" style="width:42px;height:5px;border-radius:3px;background:rgba(255,255,255,0.22);cursor:grab;"></div>
+            <div onClick="{{ closeDetail }}" style="position:absolute;right:18px;top:14px;width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.07);color:#cfccc2;display:flex;align-items:center;justify-content:center;font-size:17px;cursor:pointer;">✕</div>
+          </div>
+          <div style="padding:8px 22px 26px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+              <div style="font-family:Marcellus,serif;font-size:24px;color:#f6f4ee;">Rezervasiya</div>
+              <div style="{{ detail.badgeStyle }}">{{ detail.statusLabel }}</div>
+            </div>
+
+            <div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;">
+              <div style="width:52px;height:52px;border-radius:14px;background:rgba(201,162,39,0.14);border:1px solid rgba(201,162,39,0.3);display:flex;align-items:center;justify-content:center;font-size:22px;color:{{ gold }};flex:0 0 auto;font-family:Marcellus,serif;">{{ detail.time }}</div>
+              <div>
+                <div style="color:#f4f3ef;font-size:18px;font-weight:700;">{{ detail.name }}</div>
+                <div style="color:#9a978d;font-size:13px;margin-top:2px;">{{ detail.phone }}</div>
+              </div>
+            </div>
+
+            <div style="background:rgba(255,255,255,0.035);border:1px solid rgba(255,255,255,0.07);border-radius:18px;padding:6px 18px;margin-bottom:20px;">
+              <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);"><span style="color:#9a978d;font-size:13px;">Xidmət</span><span style="color:#f4f3ef;font-size:14px;font-weight:600;">{{ detail.serviceName }}</span></div>
+              <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);"><span style="color:#9a978d;font-size:13px;">Qiymət</span><span style="color:{{ gold }};font-size:14px;font-weight:700;">{{ detail.price }}</span></div>
+              <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);"><span style="color:#9a978d;font-size:13px;">Tarix</span><span style="color:#f4f3ef;font-size:14px;font-weight:600;">{{ detail.dateStr }}</span></div>
+              <div style="display:flex;justify-content:space-between;padding:12px 0;"><span style="color:#9a978d;font-size:13px;">Saat</span><span style="color:#f4f3ef;font-size:14px;font-weight:600;">{{ detail.time }}</span></div>
+            </div>
+
+            <div onClick="{{ detail.onCall }}" style="height:54px;border-radius:15px;background:linear-gradient(180deg,#3bdb74,#1faf55);color:#04300f;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;gap:9px;cursor:pointer;margin-bottom:10px;box-shadow:0 12px 30px -10px rgba(45,200,95,0.6);" style-active="transform:scale(0.97);">📞 Zəng et · {{ detail.phone }}</div>
+            <sc-if value="{{ detail.isPending }}" hint-placeholder-val="{{ true }}">
+              <div style="display:flex;gap:9px;margin-bottom:10px;">
+                <div onClick="{{ detail.onAccept }}" style="flex:1;height:50px;border-radius:14px;background:linear-gradient(180deg,#52e09a,#37b277);color:#06301d;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;" style-active="transform:scale(0.97);">✓ Qəbul et</div>
+                <div onClick="{{ detail.onReject }}" style="flex:1;height:50px;border-radius:14px;background:rgba(230,105,78,0.12);border:1px solid rgba(230,105,78,0.4);color:#e6694e;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;" style-active="transform:scale(0.97);">✕ İmtina et</div>
+              </div>
+            </sc-if>
+            <div onClick="{{ detail.onCancel }}" style="height:48px;border-radius:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);color:#9a978d;font-weight:600;font-size:14px;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer;">🗑 Rezervasiyanı sil</div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ toastShow }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;bottom:96px;left:50%;transform:translateX(-50%);background:rgba(28,28,30,0.92);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.12);color:#f4f3ef;font-size:13px;font-weight:600;padding:12px 20px;border-radius:14px;z-index:60;animation:toastIn .3s ease;white-space:nowrap;box-shadow:0 12px 30px -8px rgba(0,0,0,0.6);">{{ toast }}</div>
+      </sc-if>
+
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1180,&quot;height&quot;:920},&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#c9a227&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;businessName&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;EYVAZ&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;tagline&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;BƏRBƏR STUDİYASI&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  SV = {
+    sac: { name: 'Saç', price: 15, dur: '~30 dəqiqə' },
+    saqqal: { name: 'Saqqal', price: 10, dur: '~20 dəqiqə' },
+    sac_saqqal: { name: 'Saç + Saqqal', price: 22, dur: '~45 dəqiqə' },
+  };
+  HOURS = ['10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00','18:00','19:00'];
+  WD = ['B','B.E','Ç.A','Ç','C.A','C','Ş'];
+  WDFULL = ['Bazar','Bazar ertəsi','Çərşənbə axşamı','Çərşənbə','Cümə axşamı','Cümə','Şənbə'];
+  MON = ['Yan','Fev','Mar','Apr','May','İyn','İyl','Avq','Sen','Okt','Noy','Dek'];
+
+  state = {
+    role: 'customer', tab: 'rezervasiya', bookingOpen: true, confirmOpen: false,
+    lastBooking: null, category: 'hamisi', adminTab: 'rezervasiyalar', adminDayKey: null,
+    form: { name: '', phone: '', service: 'sac_saqqal', dateKey: null, time: null },
+    bookings: [], disabledSlots: {}, sheetIn: false, detailId: null, detailIn: false,
+    workingDays: { 0: false, 1: true, 2: true, 3: true, 4: true, 5: true, 6: true },
+    products: [
+      { id: 1, title: 'Oud Royale', desc: 'İsti, ədviyyatlı şərq ətri', price: 120, cat: 'etir', glyph: '🧴' },
+      { id: 2, title: 'Nuar Amber', desc: 'Kəhrəba və vanil notları', price: 95, cat: 'etir', glyph: '🧴' },
+      { id: 3, title: 'Qırmızı güllər · 25', desc: 'Təzə Hollandiya gülləri', price: 45, cat: 'gul', glyph: '🌹' },
+      { id: 4, title: 'Ağ lalə buketi', desc: 'Zərif bahar buketi', price: 38, cat: 'gul', glyph: '💐' },
+      { id: 5, title: 'Saç pomadası', desc: 'Möhkəm fiksasiya, mat görünüş', price: 25, cat: 'diger', glyph: '🪮' },
+      { id: 6, title: 'Saqqal yağı', desc: 'Sandal ağacı aromalı', price: 18, cat: 'diger', glyph: '🧔' },
+    ],
+    toast: null,
+  };
+  _toastT = null;
+
+  componentDidMount() {
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const k = this.iso(today);
+    const t1 = new Date(today); t1.setDate(t1.getDate() + 1); const k1 = this.iso(t1);
+    this.setState({
+      adminDayKey: k,
+      form: { ...this.state.form, dateKey: this.firstWorkingKey() },
+      disabledSlots: { [k]: ['13:00'] },
+      bookings: [
+        { id: 1, name: 'Rəşad Əliyev', phone: '+994 50 123 45 67', service: 'sac_saqqal', dateKey: k, time: '11:00', status: 'accepted' },
+        { id: 2, name: 'Tural Məmmədov', phone: '+994 55 987 65 43', service: 'sac', dateKey: k, time: '15:00', status: 'pending' },
+        { id: 3, name: 'Elvin Hüseynov', phone: '+994 70 222 33 44', service: 'saqqal', dateKey: k1, time: '12:00', status: 'pending' },
+      ],
+    });
+    setTimeout(() => this.setState({ sheetIn: true }), 40);
+  }
+
+  sheetStyle() {
+    return { position: 'absolute', left: 0, right: 0, bottom: 0, height: '90%', background: '#101012', borderRadius: '30px 30px 42px 42px', zIndex: 41, display: 'flex', flexDirection: 'column', boxShadow: '0 -20px 60px -10px rgba(0,0,0,0.7)', borderTop: '1px solid rgba(255,255,255,0.08)', transform: this.state.sheetIn ? 'translateY(0)' : 'translateY(100%)', transition: 'transform .36s cubic-bezier(.22,1,.36,1)' };
+  }
+  overlayStyle() {
+    return { position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.62)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)', zIndex: 40, opacity: this.state.sheetIn ? 1 : 0, transition: 'opacity .3s ease', cursor: 'pointer' };
+  }
+
+  gold() { return this.props.accentColor || '#c9a227'; }
+  grad() { const g = this.gold(); return `linear-gradient(180deg, color-mix(in srgb, ${g}, white 28%), ${g})`; }
+  iso(d) { const x = new Date(d); return x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0') + '-' + String(x.getDate()).padStart(2, '0'); }
+  fromKey(k) { return new Date(k + 'T00:00:00'); }
+  buildDates() { const a = []; const t = new Date(); t.setHours(0, 0, 0, 0); for (let i = 0; i < 14; i++) { const d = new Date(t); d.setDate(t.getDate() + i); a.push(d); } return a; }
+  isWorking(d) { return !!this.state.workingDays[d.getDay()]; }
+  firstWorkingKey() { const ds = this.buildDates(); for (const d of ds) if (this.isWorking(d)) return this.iso(d); return this.iso(ds[0]); }
+  bookedSet(key) { const s = new Set(); this.state.bookings.forEach(b => { if (b.dateKey === key && b.status !== 'rejected') s.add(b.time); }); return s; }
+  hourPassed(h, now) { return now.getHours() >= parseInt(h, 10); }
+
+  slotsFor(key) {
+    if (!key) key = this.firstWorkingKey();
+    const set = this.bookedSet(key);
+    const dis = this.state.disabledSlots[key] || [];
+    const d = this.fromKey(key);
+    const working = this.isWorking(d);
+    const now = new Date();
+    const todayKey = this.iso(now);
+    return this.HOURS.map(h => {
+      let st = 'available';
+      const past = key === todayKey && this.hourPassed(h, now);
+      if (!working || dis.includes(h) || past) st = 'disabled';
+      else if (set.has(h)) st = 'booked';
+      else if (this.state.form.time === h) st = 'selected';
+      return { time: h, state: st, style: this.slotStyle(st), onTap: () => this.selectSlot(h, st) };
+    });
+  }
+
+  slotStyle(st) {
+    const g = this.gold();
+    const base = { height: '46px', borderRadius: '13px', fontSize: '15px', fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all .18s', fontFamily: 'Manrope, sans-serif', userSelect: 'none' };
+    if (st === 'available') return { ...base, background: 'rgba(255,255,255,0.06)', color: '#f4f3ef', border: '1px solid rgba(255,255,255,0.11)', cursor: 'pointer' };
+    if (st === 'selected') return { ...base, background: this.grad(), color: '#1a1407', border: `1px solid ${g}`, boxShadow: `0 0 0 1px ${g}66, 0 8px 22px -6px ${g}`, cursor: 'pointer' };
+    if (st === 'booked') return { ...base, background: 'rgba(255,255,255,0.02)', color: '#56534c', border: '1px solid rgba(255,255,255,0.05)', cursor: 'not-allowed', textDecoration: 'line-through' };
+    return { ...base, background: 'rgba(255,255,255,0.012)', color: '#46433c', border: '1px dashed rgba(255,255,255,0.07)', cursor: 'not-allowed' };
+  }
+
+  datePillStyle(off, sel) {
+    const g = this.gold();
+    const base = { width: '54px', flex: '0 0 auto', height: '70px', borderRadius: '16px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '2px', cursor: off ? 'not-allowed' : 'pointer', transition: 'all .18s', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', color: '#f4f3ef' };
+    if (off) return { ...base, opacity: 0.3 };
+    if (sel) return { ...base, background: this.grad(), border: `1px solid ${g}`, color: '#1a1407', boxShadow: `0 8px 22px -8px ${g}` };
+    return base;
+  }
+
+  svChipStyle(sel) {
+    const g = this.gold();
+    const base = { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', borderRadius: '15px', cursor: 'pointer', transition: 'all .18s' };
+    if (sel) return { ...base, background: `${g}1f`, border: `1px solid ${g}`, color: '#f6f4ee' };
+    return { ...base, background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', color: '#cfccc2' };
+  }
+  svDot(sel) {
+    const g = this.gold();
+    return sel
+      ? { width: '18px', height: '18px', borderRadius: '50%', border: `5px solid ${g}`, background: '#101012', flex: '0 0 auto' }
+      : { width: '18px', height: '18px', borderRadius: '50%', border: '2px solid rgba(255,255,255,0.25)', flex: '0 0 auto' };
+  }
+
+  catTabStyle(sel) {
+    const g = this.gold();
+    const base = { flex: '0 0 auto', height: '38px', padding: '0 18px', borderRadius: '999px', display: 'flex', alignItems: 'center', fontSize: '13px', fontWeight: 700, cursor: 'pointer', transition: 'all .18s' };
+    if (sel) return { ...base, background: this.grad(), color: '#1a1407' };
+    return { ...base, background: 'rgba(255,255,255,0.05)', color: '#9a978d', border: '1px solid rgba(255,255,255,0.08)' };
+  }
+
+  navStyle(active) {
+    const g = this.gold();
+    const base = { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '3px', padding: '8px 20px', borderRadius: '18px', transition: 'all .22s', cursor: 'pointer' };
+    if (active) return { ...base, background: `${g}26`, color: g, transform: 'scale(1.04)', boxShadow: `0 0 18px -4px ${g}99` };
+    return { ...base, color: '#7c796f', transform: 'scale(1)' };
+  }
+
+  primaryStyle(enabled) {
+    const base = { width: '100%', height: '54px', borderRadius: '16px', fontWeight: 700, fontSize: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'all .15s', userSelect: 'none' };
+    if (enabled) return { ...base, background: this.grad(), color: '#1a1407', cursor: 'pointer', boxShadow: `0 12px 30px -10px ${this.gold()}` };
+    return { ...base, background: 'rgba(255,255,255,0.06)', color: '#56534c', cursor: 'not-allowed' };
+  }
+
+  segStyle(active) {
+    const base = { padding: '8px 16px', borderRadius: '999px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', transition: 'all .18s' };
+    if (active) return { ...base, background: this.grad(), color: '#1a1407' };
+    return { ...base, color: '#9a978d' };
+  }
+
+  tileBg(cat) {
+    if (cat === 'etir') return 'radial-gradient(120% 100% at 30% 0%, #2c2310 0%, #14110a 55%, #0d0b07 100%)';
+    if (cat === 'gul') return 'radial-gradient(120% 100% at 30% 0%, #2c1419 0%, #160f11 55%, #0d0b0c 100%)';
+    return 'radial-gradient(120% 100% at 30% 0%, #1b1e23 0%, #111316 55%, #0c0d0f 100%)';
+  }
+  catLabel(cat) { return cat === 'etir' ? 'Ətir' : cat === 'gul' ? 'Gül' : 'Digər'; }
+
+  prettyShort(key) { const d = this.fromKey(key); return d.getDate() + ' ' + this.MON[d.getMonth()] + ', ' + this.WD[d.getDay()]; }
+  prettyFull(key) { if (!key) return ''; const d = this.fromKey(key); return d.getDate() + ' ' + this.MON[d.getMonth()] + ', ' + this.WDFULL[d.getDay()]; }
+
+  // ---- actions ----
+  selectSlot(h, st) { if (st !== 'available' && st !== 'selected') return; this.setState({ form: { ...this.state.form, time: this.state.form.time === h ? null : h } }); }
+  selectDate(key, off) { if (off) return; this.setState({ form: { ...this.state.form, dateKey: key, time: null } }); }
+  selectService(id) { this.setState({ form: { ...this.state.form, service: id } }); }
+  onName(e) { const v = e.target.value; this.setState({ form: { ...this.state.form, name: v } }); }
+  onPhone(e) { const v = e.target.value; this.setState({ form: { ...this.state.form, phone: v } }); }
+
+  openBooking(time) {
+    const f = { ...this.state.form };
+    if (time) { f.dateKey = this.iso(new Date()); f.time = time; }
+    this.setState({ bookingOpen: true, sheetIn: false, form: f });
+    setTimeout(() => this.setState({ sheetIn: true }), 40);
+  }
+  closeBooking() { this.setState({ sheetIn: false }); setTimeout(() => this.setState({ bookingOpen: false }), 360); }
+
+  submitBooking() {
+    const f = this.state.form;
+    if (!(f.name.trim() && f.phone.trim() && f.time && f.dateKey)) { this.showToast('Bütün xanaları doldurun'); return; }
+    const b = { id: Date.now(), name: f.name.trim(), phone: f.phone.trim(), service: f.service, dateKey: f.dateKey, time: f.time, status: 'pending' };
+    this.setState({ sheetIn: false });
+    setTimeout(() => this.setState({ bookings: [b, ...this.state.bookings], bookingOpen: false, confirmOpen: true, lastBooking: b }), 320);
+  }
+  closeConfirm() { this.setState({ confirmOpen: false, tab: 'rezervasiya', form: { ...this.state.form, name: '', phone: '', time: null } }); }
+
+  setCategory(c) { this.setState({ category: c }); }
+  goCustomer() { this.setState({ role: 'customer' }); }
+  goAdmin() { this.setState({ role: 'admin', bookingOpen: false, confirmOpen: false, sheetIn: false }); }
+  setAdminTab(t) { this.setState({ adminTab: t }); }
+  selectAdminDay(key) { this.setState({ adminDayKey: key }); }
+
+  acceptBooking(id) { this.setState({ bookings: this.state.bookings.map(b => b.id === id ? { ...b, status: 'accepted' } : b) }); this.showToast('Rezervasiya qəbul edildi'); }
+  rejectBooking(id) { this.setState({ bookings: this.state.bookings.map(b => b.id === id ? { ...b, status: 'rejected' } : b) }); this.showToast('Rezervasiya imtina edildi'); }
+
+  callNumber(phone) {
+    this.showToast('📞 Zəng edilir · ' + phone);
+    const tel = 'tel:' + phone.replace(/[^0-9+]/g, '');
+    try {
+      const a = document.createElement('a'); a.href = tel; a.style.display = 'none';
+      (document.body || document.documentElement).appendChild(a); a.click(); a.remove();
+    } catch (e) { try { window.location.href = tel; } catch (e2) {} }
+  }
+  openDetail(id) { this.setState({ detailId: id, detailIn: false }); setTimeout(() => this.setState({ detailIn: true }), 40); }
+  closeDetail() { this.setState({ detailIn: false }); setTimeout(() => this.setState({ detailId: null }), 340); }
+  cancelBooking(id) { this.closeDetail(); setTimeout(() => { this.setState({ bookings: this.state.bookings.filter(b => b.id !== id) }); this.showToast('Rezervasiya silindi'); }, 200); }
+  detailSheetStyle() { return { position: 'absolute', left: 0, right: 0, bottom: 0, background: '#101012', borderRadius: '30px 30px 42px 42px', zIndex: 46, display: 'flex', flexDirection: 'column', boxShadow: '0 -20px 60px -10px rgba(0,0,0,0.7)', borderTop: '1px solid rgba(255,255,255,0.08)', transform: this.state.detailIn ? 'translateY(0)' : 'translateY(100%)', transition: 'transform .36s cubic-bezier(.22,1,.36,1)' }; }
+  detailOverlayStyle() { return { position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.62)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)', zIndex: 45, opacity: this.state.detailIn ? 1 : 0, transition: 'opacity .3s ease', cursor: 'pointer' }; }
+
+  toggleAdminSlot(h) {
+    const day = this.state.adminDayKey; const cur = this.state.disabledSlots[day] || [];
+    const nx = cur.includes(h) ? cur.filter(x => x !== h) : [...cur, h];
+    this.setState({ disabledSlots: { ...this.state.disabledSlots, [day]: nx } });
+  }
+  toggleWorkingDay(idx) { this.setState({ workingDays: { ...this.state.workingDays, [idx]: !this.state.workingDays[idx] } }); }
+  addDemoProduct() {
+    const id = Date.now();
+    const p = { id, title: 'Yeni ətir', desc: 'Təsvir əlavə edin', price: 60, cat: 'etir', glyph: '🧴' };
+    this.setState({ products: [p, ...this.state.products] });
+    this.showToast('Məhsul əlavə edildi');
+  }
+
+  showToast(msg) { if (this._toastT) clearTimeout(this._toastT); this.setState({ toast: msg }); this._toastT = setTimeout(() => this.setState({ toast: null }), 2200); }
+
+  renderVals() {
+    const s = this.state, g = this.gold();
+    const isCustomer = s.role === 'customer', isAdmin = s.role === 'admin';
+    const todayKey = this.iso(new Date());
+
+    const services = ['sac', 'saqqal', 'sac_saqqal'].map(id => {
+      const m = this.SV[id], sel = s.form.service === id;
+      return { id, name: m.name, dur: m.dur, price: m.price + ' ₼', chipStyle: this.svChipStyle(sel), dot: this.svDot(sel), onSelect: () => this.selectService(id), onBook: () => { this.selectService(id); this.openBooking(); } };
+    });
+
+    const dates = this.buildDates().map(d => {
+      const key = this.iso(d), off = !this.isWorking(d), sel = key === s.form.dateKey;
+      return { key, wd: this.WD[d.getDay()], dnum: d.getDate(), mon: this.MON[d.getMonth()], off, pillStyle: this.datePillStyle(off, sel), onTap: () => this.selectDate(key, off) };
+    });
+
+    const slots = this.slotsFor(s.form.dateKey);
+    const todayAvail = this.slotsFor(todayKey).filter(x => x.state === 'available');
+    const todayChips = todayAvail.slice(0, 8).map(x => ({ time: x.time, onTap: () => this.openBooking(x.time) }));
+    const freeCount = todayAvail.length;
+
+    const cats = [['hamisi', 'Hamısı'], ['etir', 'Ətir'], ['gul', 'Gül'], ['diger', 'Digər']].map(([id, label]) => ({ id, label, style: this.catTabStyle(s.category === id), onTap: () => this.setCategory(id) }));
+    const products = s.products.filter(p => s.category === 'hamisi' || p.cat === s.category).map(p => ({ ...p, price: p.price + ' ₼', tileBg: this.tileBg(p.cat), catLabel: this.catLabel(p.cat) }));
+
+    const canSubmit = !!(s.form.name.trim() && s.form.phone.trim() && s.form.time && s.form.dateKey);
+
+    // admin
+    const order = [1, 2, 3, 4, 5, 6, 0];
+    const statusMap = {
+      pending: { label: 'Gözləyir', bg: 'rgba(201,162,39,0.16)', col: g },
+      accepted: { label: 'Qəbul edildi', bg: 'rgba(70,209,138,0.16)', col: '#46d18a' },
+      rejected: { label: 'İmtina edildi', bg: 'rgba(230,105,78,0.16)', col: '#e6694e' },
+    };
+    const sorted = [...s.bookings].sort((a, b) => (a.status === 'pending' ? 0 : 1) - (b.status === 'pending' ? 0 : 1));
+    const bookings = sorted.map(b => {
+      const st = statusMap[b.status];
+      return { ...b, serviceName: this.SV[b.service].name, dateStr: this.prettyShort(b.dateKey), statusLabel: st.label, isPending: b.status === 'pending',
+        badgeStyle: { background: st.bg, color: st.col, fontSize: '11px', fontWeight: 700, padding: '5px 11px', borderRadius: '999px', whiteSpace: 'nowrap' },
+        onAccept: () => this.acceptBooking(b.id), onReject: () => this.rejectBooking(b.id) };
+    });
+    const pendingCount = s.bookings.filter(b => b.status === 'pending').length;
+
+    const adminDates = this.buildDates().slice(0, 10).map(d => {
+      const key = this.iso(d), off = !this.isWorking(d), sel = key === s.adminDayKey;
+      return { key, wd: this.WD[d.getDay()], dnum: d.getDate(), pillStyle: this.datePillStyle(off, sel), onTap: () => this.selectAdminDay(key) };
+    });
+    const adminDayKey = s.adminDayKey || todayKey;
+    const dDis = s.disabledSlots[adminDayKey] || [];
+    const dBooked = this.bookedSet(adminDayKey);
+    const adminSlots = this.HOURS.map(h => {
+      const booked = dBooked.has(h), enabled = !dDis.includes(h);
+      let style, label;
+      const bk = booked ? this.state.bookings.find(b => b.dateKey === adminDayKey && b.time === h && b.status !== 'rejected') : null;
+      if (booked) { label = 'DOLU'; style = { height: '54px', borderRadius: '13px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 700, background: 'rgba(230,105,78,0.16)', color: '#f0a594', border: '1px solid rgba(230,105,78,0.5)', cursor: 'pointer' }; }
+      else if (enabled) { label = 'aktiv'; style = { height: '54px', borderRadius: '13px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 700, background: `${g}1f`, color: g, border: `1px solid ${g}`, cursor: 'pointer' }; }
+      else { label = 'bağlı'; style = { height: '54px', borderRadius: '13px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', fontSize: '14px', fontWeight: 700, background: 'rgba(255,255,255,0.02)', color: '#46433c', border: '1px dashed rgba(255,255,255,0.08)', cursor: 'pointer' }; }
+      return { time: h, label, style, onToggle: () => { if (booked) { if (bk) this.openDetail(bk.id); } else this.toggleAdminSlot(h); } };
+    });
+
+    const workDays = order.map(idx => {
+      const on = !!s.workingDays[idx];
+      return { idx, label: this.WDFULL[idx], on,
+        switchTrack: { width: '46px', height: '27px', borderRadius: '999px', padding: '3px', display: 'flex', background: on ? this.grad() : 'rgba(255,255,255,0.1)', justifyContent: on ? 'flex-end' : 'flex-start', transition: 'all .2s' },
+        switchKnob: { width: '21px', height: '21px', borderRadius: '50%', background: '#fff', boxShadow: '0 2px 5px rgba(0,0,0,0.3)' },
+        onTap: () => this.toggleWorkingDay(idx) };
+    });
+
+    const adminTabs = [['rezervasiyalar', 'Rezervasiyalar'], ['saatlar', 'Saatlar'], ['gunler', 'İş günləri'], ['mehsullar', 'Məhsullar']].map(([id, label]) => ({
+      id, label, style: this.catTabStyle(s.adminTab === id), showBadge: id === 'rezervasiyalar' && pendingCount > 0, badge: pendingCount, onTap: () => this.setAdminTab(id),
+    }));
+
+    const lb = s.lastBooking || {};
+
+    const db = s.detailId ? s.bookings.find(b => b.id === s.detailId) : null;
+    let detail = null;
+    if (db) {
+      const st = statusMap[db.status];
+      detail = { name: db.name, phone: db.phone, onCall: () => this.callNumber(db.phone), serviceName: this.SV[db.service].name, price: this.SV[db.service].price + ' ₼',
+        dateStr: this.prettyFull(db.dateKey), time: db.time, statusLabel: st.label, isPending: db.status === 'pending',
+        badgeStyle: { background: st.bg, color: st.col, fontSize: '12px', fontWeight: 700, padding: '6px 14px', borderRadius: '999px', whiteSpace: 'nowrap' },
+        onAccept: () => { this.acceptBooking(db.id); this.closeDetail(); },
+        onReject: () => { this.rejectBooking(db.id); this.closeDetail(); },
+        onCancel: () => this.cancelBooking(db.id) };
+    }
+
+    return {
+      gold: g,
+      businessName: this.props.businessName || 'EYVAZ',
+      tagline: this.props.tagline || 'BƏRBƏR STUDİYASI',
+      isCustomer, isAdmin,
+      showRes: isCustomer && s.tab === 'rezervasiya',
+      showShop: isCustomer && s.tab === 'magaza',
+      bookingOpen: s.bookingOpen, confirmOpen: s.confirmOpen, toastShow: !!s.toast, toast: s.toast,
+      sheetStyle: this.sheetStyle(), overlayStyle: this.overlayStyle(),
+      segCustStyle: this.segStyle(isCustomer), segAdminStyle: this.segStyle(isAdmin),
+      goCustomer: () => this.goCustomer(), goAdmin: () => this.goAdmin(),
+      navResStyle: this.navStyle(s.tab === 'rezervasiya'), navShopStyle: this.navStyle(s.tab === 'magaza'),
+      tapRes: () => this.setState({ tab: 'rezervasiya' }), tapShop: () => this.setState({ tab: 'magaza' }),
+      openBookingBtn: () => this.openBooking(), closeBooking: () => this.closeBooking(),
+      heroBtnStyle: { width: '100%', height: '56px', borderRadius: '18px', background: this.grad(), color: '#1a1407', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', cursor: 'pointer', boxShadow: `0 14px 34px -10px ${g}`, transition: 'all .15s' },
+      openLabel: this.isWorking(new Date()) ? 'Bu gün açıqdır' : 'Bu gün bağlıdır',
+      freeCount, todayDateLabel: this.prettyShort(todayKey), todayChips, noTodaySlots: todayChips.length === 0,
+      services, dates, slots, cats, products,
+      fName: s.form.name, fPhone: s.form.phone, onName: (e) => this.onName(e), onPhone: (e) => this.onPhone(e),
+      submitBooking: () => this.submitBooking(), submitStyle: this.primaryStyle(canSubmit), submitLabel: canSubmit ? 'Rezerv et' : 'Saat seçin',
+      closeConfirm: () => this.closeConfirm(),
+      cService: this.SV[lb.service] ? this.SV[lb.service].name : '', cDate: this.prettyFull(lb.dateKey), cTime: lb.time || '', cName: lb.name || '',
+      adminTabs,
+      aRes: s.adminTab === 'rezervasiyalar', aSlots: s.adminTab === 'saatlar', aDays: s.adminTab === 'gunler', aProducts: s.adminTab === 'mehsullar',
+      bookings, adminDates, adminSlots, workDays,
+      addDemoProduct: () => this.addDemoProduct(),
+      detailOpen: !!detail, detail, closeDetail: () => this.closeDetail(),
+      detailSheetStyle: this.detailSheetStyle(), detailOverlayStyle: this.detailOverlayStyle(),
+    };
+  }
+}
+</script>
+</body>
+</html>

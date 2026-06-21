@@ -1,0 +1,17 @@
+import Reservation from '../models/Example.js';
+import ClosedDay from '../models/ClosedDay.js';
+import ClosedSlot from '../models/ClosedSlot.js';
+
+function todayKey() {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, '0');
+  const d = String(now.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
+export async function cleanupOldReservations() {
+  await Reservation.deleteMany({ day: { $lt: todayKey() } });
+  await ClosedDay.deleteMany({ date: { $lt: todayKey() } });
+  await ClosedSlot.deleteMany({ date: { $lt: todayKey() } });
+}
